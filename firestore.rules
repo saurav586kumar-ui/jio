@@ -1,0 +1,81 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Default Deny Catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isUser(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email == 'saurav586kumar@gmail.com' && request.auth.token.email_verified == true) ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Books Collection
+    match /books/{bookId} {
+      allow get: if isValidId(bookId);
+      allow list: if true;
+      allow create, update, delete: if isAdmin() && isValidId(bookId);
+    }
+
+    // Categories Collection
+    match /categories/{categoryId} {
+      allow get: if isValidId(categoryId);
+      allow list: if true;
+      allow create, update, delete: if isAdmin() && isValidId(categoryId);
+    }
+
+    // Student User Library (Bookmarks, reading progress, notes)
+    match /users/{userId}/library/{bookId} {
+      allow get, delete: if isValidId(userId) && isValidId(bookId) && (isUser(userId) || isAdmin());
+      allow list: if isValidId(userId) && (isUser(userId) || isAdmin());
+      allow create, update: if isValidId(userId) && isValidId(bookId) && isUser(userId) &&
+        request.resource.data.userId == userId &&
+        request.resource.data.bookId == bookId;
+    }
+
+    // Editorial Articles
+    match /articles/{articleId} {
+      allow get: if isValidId(articleId);
+      allow list: if true;
+      allow create, update, delete: if isAdmin() && isValidId(articleId);
+    }
+
+    // Affiliate Products
+    match /affiliates/{affiliateId} {
+      allow get: if isValidId(affiliateId);
+      allow list: if true;
+      // Allow tracking click increments by clients safely, or full admin control
+      allow create, delete: if isAdmin() && isValidId(affiliateId);
+      allow update: if (isAdmin() && isValidId(affiliateId)) || (
+        isValidId(affiliateId) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['clickCount']) &&
+        request.resource.data.clickCount is number &&
+        request.resource.data.clickCount == resource.data.clickCount + 1
+      );
+    }
+
+    // Admins registry
+    match /admins/{adminUid} {
+      allow get: if isSignedIn() && (request.auth.uid == adminUid || isAdmin());
+      allow list: if isAdmin();
+      allow write: if isAdmin() && isValidId(adminUid);
+    }
+  }
+}

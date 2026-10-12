@@ -1,0 +1,142 @@
+{
+  "entities": {
+    "Book": {
+      "title": "Book",
+      "description": "Educational digital book or PDF resource metadata",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 200, "description": "Title of the educational book" },
+        "description": { "type": "string", "maxLength": 2000, "description": "Book synopsis and outline" },
+        "author": { "type": "string", "maxLength": 100, "description": "Author or editorial board" },
+        "publisher": { "type": "string", "maxLength": 100, "description": "Publisher or publication authority" },
+        "language": { "type": "string", "maxLength": 40, "description": "Language of the text" },
+        "classLevel": { "type": "string", "maxLength": 50, "description": "Target class or education tier" },
+        "board": { "type": "string", "maxLength": 50, "description": "Education board or curriculum" },
+        "exam": { "type": "string", "maxLength": 50, "description": "Target examination if applicable" },
+        "subject": { "type": "string", "maxLength": 60, "description": "Academic subject" },
+        "chapter": { "type": "string", "maxLength": 120, "description": "Specific chapter or All Chapters" },
+        "contentType": { "type": "string", "maxLength": 50, "description": "Type of educational material" },
+        "coverUrl": { "type": "string", "maxLength": 500, "description": "Cover thumbnail URL or icon URI" },
+        "pdfUrl": { "type": "string", "maxLength": 1500, "description": "Direct download or reading PDF URL" },
+        "fileSizeBytes": { "type": "number", "description": "Approximate file size in bytes" },
+        "pageCount": { "type": "number", "description": "Total pages in the PDF document" },
+        "published": { "type": "boolean", "description": "Whether resource is live in public library" },
+        "isFeatured": { "type": "boolean", "description": "Whether book is featured on homepage" },
+        "downloadPermitted": { "type": "boolean", "description": "Permission to download locally" },
+        "copyrightLicense": { "type": "string", "maxLength": 200, "description": "Copyright and redistribution license" },
+        "tags": { "type": "string", "maxLength": 300, "description": "Comma separated search tags" },
+        "viewCount": { "type": "number", "description": "Times viewed or read" },
+        "downloadCount": { "type": "number", "description": "Times downloaded" },
+        "createdAt": { "type": "string", "description": "Creation timestamp ISO" },
+        "updatedAt": { "type": "string", "description": "Last modified timestamp ISO" }
+      },
+      "required": ["title", "subject", "contentType", "published"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Taxonomy item for classes, boards, exams, subjects, and types",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100, "description": "Display name" },
+        "type": { "type": "string", "maxLength": 40, "description": "Type of taxonomy" },
+        "code": { "type": "string", "maxLength": 50, "description": "Unique slug or code" },
+        "description": { "type": "string", "maxLength": 300, "description": "Short explanation" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" }
+      },
+      "required": ["name", "type", "code"]
+    },
+    "UserLibraryItem": {
+      "title": "UserLibraryItem",
+      "description": "Student personal bookmarks, reading progress, and notes",
+      "type": "object",
+      "properties": {
+        "bookId": { "type": "string", "maxLength": 100, "description": "Referenced book ID" },
+        "userId": { "type": "string", "maxLength": 128, "description": "Owning user UID" },
+        "bookTitle": { "type": "string", "maxLength": 200, "description": "Snapshot of book title" },
+        "coverUrl": { "type": "string", "maxLength": 500, "description": "Snapshot of book cover" },
+        "isBookmarked": { "type": "boolean", "description": "Saved to student favourites" },
+        "lastReadPage": { "type": "number", "description": "Page number where student stopped" },
+        "totalPages": { "type": "number", "description": "Document page count" },
+        "readingProgressPercent": { "type": "number", "description": "Percent 0 to 100 completed" },
+        "lastReadAt": { "type": "string", "description": "Timestamp of latest reading session" },
+        "notes": { "type": "string", "maxLength": 1000, "description": "Personal annotations or notes" }
+      },
+      "required": ["bookId", "userId"]
+    },
+    "AffiliateProduct": {
+      "title": "AffiliateProduct",
+      "description": "Recommended educational purchase or affiliate reference link",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 200, "description": "Product title" },
+        "description": { "type": "string", "maxLength": 500, "description": "Concise product description" },
+        "category": { "type": "string", "maxLength": 50, "description": "Related category" },
+        "merchant": { "type": "string", "maxLength": 50, "description": "Retailer name e.g. Amazon, Flipkart" },
+        "affiliateUrl": { "type": "string", "maxLength": 1000, "description": "Sponsored outbound link" },
+        "imageUrl": { "type": "string", "maxLength": 500, "description": "Product thumbnail image" },
+        "priceDisplay": { "type": "string", "maxLength": 40, "description": "Listed price indicator" },
+        "placement": { "type": "string", "maxLength": 30, "description": "Page placement" },
+        "targetSubject": { "type": "string", "maxLength": 50, "description": "Contextual subject filter" },
+        "targetExam": { "type": "string", "maxLength": 50, "description": "Contextual exam filter" },
+        "clickCount": { "type": "number", "description": "Outbound redirect analytics" },
+        "isActive": { "type": "boolean", "description": "Display toggle" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" }
+      },
+      "required": ["title", "affiliateUrl", "merchant"]
+    },
+    "Article": {
+      "title": "Article",
+      "description": "Editorial study guide, preparation roadmap, or learning article",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 200, "description": "Article headline" },
+        "slug": { "type": "string", "maxLength": 100, "description": "URL friendly slug" },
+        "summary": { "type": "string", "maxLength": 500, "description": "Summary paragraph" },
+        "content": { "type": "string", "maxLength": 10000, "description": "Article markdown or text" },
+        "category": { "type": "string", "maxLength": 50, "description": "Domain or board focus" },
+        "author": { "type": "string", "maxLength": 100, "description": "Article author" },
+        "readTime": { "type": "string", "maxLength": 30, "description": "Estimated reading duration" },
+        "publishedAt": { "type": "string", "description": "Publication date" },
+        "tags": { "type": "string", "maxLength": 200, "description": "Comma separated tags" }
+      },
+      "required": ["title", "slug", "summary", "content"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Authorized administrator registry entry",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "maxLength": 120, "description": "Admin email address" },
+        "role": { "type": "string", "maxLength": 30, "description": "Role descriptor" },
+        "grantedAt": { "type": "string", "description": "Grant timestamp" }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/books/{bookId}": {
+      "schema": "Book",
+      "description": "Public educational books and PDF catalog"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Taxonomy definitions for class levels, boards, exams, and subjects"
+    },
+    "/users/{userId}/library/{bookId}": {
+      "schema": "UserLibraryItem",
+      "description": "Student private reading history, bookmarks, and last-read page"
+    },
+    "/affiliates/{affiliateId}": {
+      "schema": "AffiliateProduct",
+      "description": "Curated sponsored educational resources and affiliate links"
+    },
+    "/articles/{articleId}": {
+      "schema": "Article",
+      "description": "Editorial study guides and academic articles"
+    },
+    "/admins/{adminUid}": {
+      "schema": "AdminRecord",
+      "description": "Admin role registry documents"
+    }
+  }
+}

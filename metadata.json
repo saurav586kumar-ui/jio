@@ -1,0 +1,6 @@
+{
+  "name": "EDSU — Digital Books & Learning Library",
+  "description": "Premium educational digital library to discover, read, and download verified PDFs, textbooks, notes, and study material by class, board, exam, and subject.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

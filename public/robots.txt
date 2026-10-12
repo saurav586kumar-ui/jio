@@ -1,0 +1,12 @@
+# robots.txt for EDSU Digital Learning Library
+User-agent: *
+Allow: /
+Allow: /library
+Allow: /book/*
+Allow: /articles/*
+
+# Disallow private user states and administration panels
+Disallow: /admin
+Disallow: /student-library
+
+Sitemap: https://edsu.org/sitemap.xml
